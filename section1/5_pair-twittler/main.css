@@ -1,0 +1,98 @@
+* {
+  font-family: Arial, sans-serif;
+  max-width: 960px;
+}
+
+#greeting {
+  font-size: 2em;
+  font-family: sans-serif;
+  font-weight: bold;
+  border: 2px solid #ccc;
+  border-radius: 1em;
+  color: white;
+  background-color: #eee;
+  text-shadow: 0 0 5px #333;
+  text-align: center;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+.inputForm {
+  padding: 8px 0;
+  background-color: #18bfe6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  color: white;
+}
+
+.inputForm > * {
+  margin: 4px 16px;
+}
+
+.inputForm > input[type="text"] {
+  height: 24px;
+}
+textarea {
+  resize: none;
+}
+
+.inputForm > input[type="submit"] {
+  width: 72px;
+  height: 36px;
+}
+
+.randomDiv {
+  height: 64px;
+  background-color: #1b539d;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+}
+
+#randomButton {
+  width: 148px;
+  height: 40px;
+  margin-left: 16px;
+}
+
+#tweetlist {
+  display: flex;
+  justify-content: center;
+  background-color: #eeeeee;
+}
+
+#tweetWrapper {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.tweet {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 12px 0;
+  list-style-type: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.tweet__username {
+  width: 60%;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.tweet__username:hover {
+  color: #9ddef2;
+  cursor: pointer;
+}
+
+.tweet__createdAt {
+  width: 40%;
+  text-align: right;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.tweet__message {
+  margin-bottom: 4px;
+}
