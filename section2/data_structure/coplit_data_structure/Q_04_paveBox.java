@@ -77,7 +77,7 @@ public class Q_04_paveBox {
                 target = boxes[i];
                 cnt = 1;
             }
-            if (i == boxes.length -1) groups.add(cnt); // 마지막 사람은 결국 나가니 그룹에 추가해줍니다.
+            if (i == boxes.length - 1) groups.add(cnt); // 마지막 사람은 결국 나가니 그룹에 추가해줍니다.
         }
         int output = groups.stream().max(Integer::compareTo).orElse(0);
         return output;

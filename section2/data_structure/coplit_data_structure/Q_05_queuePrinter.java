@@ -75,23 +75,30 @@ public class Q_05_queuePrinter {
     }
 
     public int queuePrinter(int bufferSize, int capacities, int[] documents) {
+        // 원본 유지, 배열보다 요소 삭제가 더 쉬운 ArrayList로 documents를 새로 만들어줍니다
         ArrayList<Integer> copyDocs = new ArrayList<>();
         for (int i : documents) copyDocs.add(i);
+
+        // 프린터 생성
         int[] printer = new int[bufferSize];
+
         int time = 0;
-        while (copyDocs.size() != 0) {
-            int inputDoc = copyDocs.get(0);
+        while (copyDocs.size() != 0) {  // 프린트에 모든 용지가 들어갈때까지
+            int inputDoc = copyDocs.get(0);  // 프린트에 들어가야 할 첫번째 문서
+            // 프린트 안에 있는 문서의 capacity + 들어가야 할 문서의 capacity를 비교해서
             if (Arrays.stream(printer).sum() + inputDoc <= capacities) {
-                printing(printer, bufferSize, inputDoc);
+                printing(printer, bufferSize, inputDoc);   // 프린트의 총 capacity보다 작으면 문서가 들어가고,
                 copyDocs.remove(0);
             } else {
-                printing(printer, bufferSize, 0);
+                printing(printer, bufferSize, 0);  // 프린트의 총 capacity보다 크면 못 들어갑니다.(0이 들어갑니다)
             }
-            time++;
+            time++;  // 프린트가 한 칸 이동하면 1초가 흐릅니다
         }
+        // 프린트에 모든 문서가 들어가면, 마지막 문서가 나오기까지 걸리는 시간은 bufferSize초
         return time + bufferSize;
     }
 
+    // 프린트는 문서가 들어오던 안 들어오던 매번 한칸씩 앞으로 이동합니다.
     public static void printing(int[] printer, int bufferSize, int inputDoc) {
         for (int i = 1; i < bufferSize - 1; i++) {
             printer[i] = printer[i + 1];
