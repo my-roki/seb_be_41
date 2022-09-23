@@ -72,9 +72,17 @@ public class Q_05_queuePrinter {
 
         int output = coplit.queuePrinter(bufferSize, capacities, documents);
         System.out.println(output); // 8
+
+        bufferSize = 2;
+        capacities = 10;
+        documents = new int[]{0, 0, 0};
+
+        output = coplit.queuePrinter(bufferSize, capacities, documents);
+        System.out.println(output); // 0
     }
 
     public int queuePrinter(int bufferSize, int capacities, int[] documents) {
+        if (Arrays.stream(documents).sum() == 0) return 0;
         // 원본 유지, 배열보다 요소 삭제가 더 쉬운 ArrayList로 documents를 새로 만들어줍니다
         ArrayList<Integer> copyDocs = new ArrayList<>();
         for (int i : documents) copyDocs.add(i);
