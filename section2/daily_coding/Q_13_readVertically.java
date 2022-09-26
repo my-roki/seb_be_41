@@ -59,15 +59,15 @@ public class Q_13_readVertically {
             if (largest < arr[i].length()) largest = arr[i].length();
         }
 
-        String output = "";
+        StringBuilder output = new StringBuilder();
         for (int j = 0; j < largest; j++) {
-            try {
-                for (String[] word : newArr) {
-                    output += word[j];
-                }
-            } catch (Exception e) {}
+            for (String[] word : newArr) {
+                try {
+                    output.append(word[j]);
+                } catch (Exception ignored){}
+            }
         }
-
-        return output;
+        return output.toString();
     }
 }
+
