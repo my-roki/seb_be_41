@@ -1,4 +1,4 @@
-package section2.data_structure;
+package section2.algorithms;
 
 import java.util.Arrays;
 
