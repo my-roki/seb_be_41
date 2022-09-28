@@ -69,15 +69,14 @@ class treeSolution {
 public class Q_06_ImplementationTree {
     public static void main(String[] args) {
         // write test case here
-        treeSolution rootNode = new treeSolution("hello");
+        treeSolution rootNode = new treeSolution("0");
 
-        for (int i = 0; i <= 4; i++) {
+        for (int i = 1; i <= 5; i++) {
             rootNode.addChildNode(new treeSolution(Integer.toString(i)));
         }
-        System.out.println(rootNode); // {value: null, children: Solution(5)}
-        System.out.println(rootNode.contains(String.valueOf(5))); // false
-        System.out.println(rootNode.contains(String.valueOf(1))); // true
-
+        System.out.println(rootNode.getValue()); // {value: 0, children: treeSolution(5)}
+        System.out.println(rootNode.getChildrenNode()); // {value: 0, children: treeSolution(5)}
+        System.out.println(rootNode.contains("6")); // false
+        System.out.println(rootNode.contains("1")); // true
     }
-
 }
