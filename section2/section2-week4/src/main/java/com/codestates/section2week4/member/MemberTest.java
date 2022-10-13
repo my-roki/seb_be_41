@@ -1,8 +1,11 @@
 package com.codestates.section2week4.member;
 
+import com.codestates.section2week4.DependencyConfig;
+
 public class MemberTest {
     public static void main(String[] args) {
-        MemberService memberService = new MemberService();
+        DependencyConfig config = new DependencyConfig();
+        MemberService memberService = config.memberService();
 
         Member member = new Member(0L, "roki@codestates.com", "roki", "010-1234-5678");
         memberService.createMember(member);
