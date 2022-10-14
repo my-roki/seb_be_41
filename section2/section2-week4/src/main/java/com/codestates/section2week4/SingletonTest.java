@@ -1,15 +1,13 @@
 package com.codestates.section2week4;
 
-import com.codestates.section2week4.member.MemberService;
+import com.codestates.section2week4.singleton.SingletonService;
 
 public class SingletonTest {
-    static DependencyConfig dependencyConfig = new DependencyConfig();
-
-    static MemberService memberService1 = dependencyConfig.memberService();
-    static MemberService memberService2 = dependencyConfig.memberService();
+    static SingletonService singletonService1 = SingletonService.getInstance();
+    static SingletonService singletonService2 = SingletonService.getInstance();
 
     public static void main(String[] args) {
-        System.out.printf("memberService1 : %s%n", memberService1);
-        System.out.printf("memberService2 : %s%n", memberService2);
+        System.out.printf("singletonService1 : %s%n", singletonService1);
+        System.out.printf("singletonService2 : %s%n", singletonService2);
     }
 }
