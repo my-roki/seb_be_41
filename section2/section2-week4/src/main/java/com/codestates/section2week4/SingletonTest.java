@@ -1,13 +1,16 @@
 package com.codestates.section2week4;
 
-import com.codestates.section2week4.singleton.SingletonService;
+import com.codestates.section2week4.member.MemberService;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class SingletonTest {
-    static SingletonService singletonService1 = SingletonService.getInstance();
-    static SingletonService singletonService2 = SingletonService.getInstance();
+    static AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(DependencyConfig.class);
+
+    static MemberService memberService1 = ac.getBean("memberService", MemberService.class);
+    static MemberService memberService2 = ac.getBean("memberService", MemberService.class);
 
     public static void main(String[] args) {
-        System.out.printf("singletonService1 : %s%n", singletonService1);
-        System.out.printf("singletonService2 : %s%n", singletonService2);
+        System.out.printf("memberService1 : %s%n", memberService1);
+        System.out.printf("memberService2 : %s%n", memberService2);
     }
 }
