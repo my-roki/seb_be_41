@@ -1,11 +1,13 @@
 package com.codestates.section2week4.coffee;
 
-import com.codestates.section2week4.DependencyConfig;
+import com.codestates.section2week4.AutoDependencyConfig;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class CoffeeTest {
     public static void main(String[] args) {
-        DependencyConfig config = new DependencyConfig();
-        CoffeeService coffeeService = config.coffeeService();
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AutoDependencyConfig.class);
+        CoffeeService coffeeService = ac.getBean(CoffeeService.class);
 
         Coffee coffee = new Coffee(0L, "바닐라 라테", "Vanilla Latte", 5000);
         coffeeService.createCoffee(coffee);
