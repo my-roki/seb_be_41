@@ -7,7 +7,7 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import start.aop.order.Aspect4;
+import start.aop.order.Aspect5;
 import start.aop.order.OrderRepository;
 import start.aop.order.OrderService;
 
@@ -15,7 +15,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @Slf4j
 @SpringBootTest
-@Import(Aspect4.class)
+@Import({Aspect5.LogAspect.class, Aspect5.TxAspect.class})
 public class AopTest {
     @Autowired
     OrderService orderService;
