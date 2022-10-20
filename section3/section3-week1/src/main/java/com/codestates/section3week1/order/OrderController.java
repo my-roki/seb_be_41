@@ -1,36 +1,45 @@
 package com.codestates.section3week1.order;
 
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping(value = "/v1/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/orders")
 public class OrderController {
     @PostMapping
-    public String postOrder(@RequestParam("memberId") long memberId,
-                            @RequestParam("coffeeId") long coffeeId) {
+    public ResponseEntity postOrder(@RequestParam("memberId") long memberId,
+                                    @RequestParam("coffeeId") long coffeeId) {
         System.out.printf("# memberId: %d%n", memberId);
         System.out.printf("# coffeeId: %d%n", coffeeId);
 
-        String response = "{\"" +
-                "memberId\":\"" + memberId + "\"," +
-                "\"coffeeId\":\"" + coffeeId + "\"}";
-        return response;
+        // JSON 문자열 수작업을 Map 객체로 대체
+        Map<String, Long> map = new HashMap<>();
+        map.put("memberId", memberId);
+        map.put("coffeeId", coffeeId);
+
+        // 리턴 값을 ResponseEntity 객체로 변경
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public String getOrders() {
+    public ResponseEntity getOrders() {
         System.out.println("# get Orders");
 
         // not implementation
-        return null;
+        // 리턴 값을 ResponseEntity 객체로 변경
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{order-id}")
-    public String getOrder(@PathVariable("order-id") long orderId) {
+    public ResponseEntity getOrder(@PathVariable("order-id") long orderId) {
         System.out.printf("# orderId: %d%n", orderId);
 
         // not implementation
-        return null;
+        // 리턴 값을 ResponseEntity 객체로 변경
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
