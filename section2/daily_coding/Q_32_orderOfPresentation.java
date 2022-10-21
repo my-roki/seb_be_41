@@ -49,7 +49,6 @@ System.out.println(output); // 6
 
 import java.util.Arrays;
 
-// TODO : 현재 정확성에서는 통과를 하지만 효율성 측면에서 통과를 하지 못하고 있습니다. 리팩토링이 필요한 코드입니다.
 public class Q_32_orderOfPresentation {
     public static void main(String[] args) {
         // write test case here
@@ -63,37 +62,32 @@ public class Q_32_orderOfPresentation {
     }
 
     public int orderOfPresentation(int N, int[] K) {
-        // 조 배열 생성
-        int[] lookup = new int[N];
-        for (int i = 0; i < N; i++) lookup[i] = i + 1;
+        int output = 0;
 
-        StringBuilder target = new StringBuilder();
-        for (int n : K) target.append(n);  // 배열 안에 있는 요소를 비교하기 쉽게 문자열로 만듭니다.
+        boolean[] isUsed = new boolean[N + 1];
+        for (int i = 0; i < K.length; i++) {
+            int num = K[i];
+            isUsed[num] = true;
 
-        int[] output = permutation(N, lookup, new int[]{}, target.toString(), new int[]{0, 0});
-        return output[1];
+            // 현재 숫자보다 작은 숫자들로 만들 수 있는 순열의 개수를 구합니다.
+            // 현재 숫자보다 작은 수로 이루어진 새로운 배열 생성
+            boolean[] candidates = Arrays.copyOfRange(isUsed, 1, num);
+
+            // 새로 만든 배열에서 사용하지 않은 수들을 카운트합니다.
+            int cnt = 0;
+            for (boolean candidate : candidates) if (!candidate) cnt++;
+
+            // 사용하지 않을 수들로 만들수 있는 순열 경우의 수의 개수를 구합니다.
+            int permutationCount = cnt * factorial(N - i - 1);
+            output += permutationCount;
+        }
+        return output;
     }
 
-    public int[] permutation(int round, int[] lookup, int[] bucket, String target, int[] count) {
-        if (round == 0) {
-            StringBuilder candidate = new StringBuilder();
-            for (int b : bucket) candidate.append(b);
-            if (target.equals(candidate.toString())) {
-                count[0] = 1;
-                return count;
-            }
-            count[1]++;
-        }
-
-        for (int number : lookup) {
-            int[] newBucket = Arrays.copyOf(bucket, bucket.length + 1);
-            newBucket[newBucket.length - 1] = number;
-            int[] filterLookup = Arrays.stream(lookup).filter(i -> i != number).toArray();
-            count = permutation(round - 1, filterLookup, newBucket, target, count);
-            if (count[0] == 1) return count;
-        }
-
-        return count;
+    public int factorial(int n) {
+        int result = 1;
+        for (int i = 1; i <= n; i++) result *= i;
+        return result;
     }
 }
 
