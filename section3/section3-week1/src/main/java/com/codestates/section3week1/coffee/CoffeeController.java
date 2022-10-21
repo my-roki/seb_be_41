@@ -4,12 +4,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/v1/coffees")
 public class CoffeeController {
+    // Mock data
+    // coffeeId 는 고유한 값
+    private long coffeeId = 0;
+    private final Map<Long, Map<String, Object>> coffees = new HashMap<>();
+
+    @PostConstruct
+    public void init() {
+        Map<String, Object> coffee = new HashMap<>();
+        coffeeId = coffeeId + 1L;
+        coffee.put("coffeeId", coffeeId);
+        coffee.put("korName", "바닐라 라떼");
+        coffee.put("engName", "Vanilla Latte");
+        coffee.put("price", 4500);
+
+        coffees.put(coffeeId, coffee);
+    }
+
     @PostMapping
     public ResponseEntity postCoffee(@RequestParam("engName") String engName,
                                      @RequestParam("korName") String korName,
@@ -18,33 +36,60 @@ public class CoffeeController {
         System.out.printf("# korName: %s%n", korName);
         System.out.printf("# price: %s%n", price);
 
-        // JSON 문자열 수작업을 Map 객체로 대체
-        Map<String, Object> map = new HashMap<>();
-        map.put("engName", engName);
-        map.put("korName", korName);
-        map.put("price", price);
+        Map<String, Object> coffee = new HashMap<>();
+        // coffeeId 는 고유한 값이므로 생성할때마다 1씩 증가합니다.
+        coffeeId = coffeeId + 1L;
+        coffee.put("coffeeId", coffeeId);
+        coffee.put("korName", korName);
+        coffee.put("engName", engName);
+        coffee.put("price", price);
 
-        // 리턴 값을 ResponseEntity 객체로 변경
-        return new ResponseEntity<>(map, HttpStatus.CREATED);
+        coffees.put(coffeeId, coffee);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity getCoffees() {
-        System.out.println("# get Coffees");
-
-        // not implementation
-        // 리턴 값을 ResponseEntity 객체로 변경
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(coffees, HttpStatus.OK);
 
     }
 
     @GetMapping("/{coffee-id}")
     public ResponseEntity getCoffee(@PathVariable("coffee-id") long coffeeId) {
-        System.out.printf("# coffeeId: %d%n", coffeeId);
+        // 조회하려는 커피가 있는지 확인합니다.
+        if (!coffees.containsKey(coffeeId)) return new ResponseEntity(HttpStatus.NOT_FOUND);
 
-        // not implementation
-        // 리턴 값을 ResponseEntity 객체로 변경
-        return new ResponseEntity<>(HttpStatus.OK);
+        Map<String, Object> coffee = coffees.get(coffeeId);
+        return new ResponseEntity<>(coffee, HttpStatus.OK);
+    }
 
+    @PatchMapping("/{coffee-id}")
+    public ResponseEntity patchCoffee(@PathVariable("coffee-id") long coffeeId,
+                                    @RequestParam(value = "korName", required = false) String korName,
+                                    @RequestParam(value = "engName", required = false) String engName,
+                                    @RequestParam(value = "price", required = false) Long price) {
+
+        // 변경하려는 커피가 있는지 확인합니다.
+        if (!coffees.containsKey(coffeeId)) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // coffees 에서 coffeeId 로 coffee 를 찾습니다.
+        Map<String, Object> coffee = coffees.get(coffeeId);
+        if (korName != null) coffee.replace("korName", korName);
+        if (engName != null) coffee.replace("engName", engName);
+        if (price != null) coffee.replace("price", price);
+        coffees.replace(coffeeId, coffee);
+
+        return new ResponseEntity<>(coffee, HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{coffee-id}")
+    public ResponseEntity deleteCoffee(@PathVariable("coffee-id") long coffeeId) {
+        // 삭제하려는 커피가 있는지 확인합니다.
+        if (!coffees.containsKey(coffeeId)) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        coffees.remove(coffeeId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
