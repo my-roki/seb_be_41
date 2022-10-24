@@ -14,38 +14,30 @@ public class CoffeeController {
     // Mock data
     // coffeeId 는 고유한 값
     private long coffeeId = 0;
-    private final Map<Long, Map<String, Object>> coffees = new HashMap<>();
+    private final Map<Long, CoffeeDto> coffees = new HashMap<>();
 
     @PostConstruct
     public void init() {
-        Map<String, Object> coffee = new HashMap<>();
+        CoffeeDto coffee = new CoffeeDto();
         coffeeId = coffeeId + 1L;
-        coffee.put("coffeeId", coffeeId);
-        coffee.put("korName", "바닐라 라떼");
-        coffee.put("engName", "Vanilla Latte");
-        coffee.put("price", 4500);
+        coffee.setCoffeeId(coffeeId);
+        coffee.setEngName("Caffe Latte");
+        coffee.setKorName("카페라떼");
+        coffee.setPrice(4000);
 
         coffees.put(coffeeId, coffee);
     }
 
     @PostMapping
-    public ResponseEntity postCoffee(@RequestParam("engName") String engName,
-                                     @RequestParam("korName") String korName,
-                                     @RequestParam("price") long price) {
-        System.out.printf("# engName: %s%n", engName);
-        System.out.printf("# korName: %s%n", korName);
-        System.out.printf("# price: %s%n", price);
+    public ResponseEntity postCoffee(@RequestBody CoffeeDto coffeeDto) {
+        System.out.printf("# engName: %s%n", coffeeDto.getEngName());
+        System.out.printf("# korName: %s%n", coffeeDto.getKorName());
+        System.out.printf("# price: %s%n", coffeeDto.getPrice());
 
-        Map<String, Object> coffee = new HashMap<>();
-        // coffeeId 는 고유한 값이므로 생성할때마다 1씩 증가합니다.
-        coffeeId = coffeeId + 1L;
-        coffee.put("coffeeId", coffeeId);
-        coffee.put("korName", korName);
-        coffee.put("engName", engName);
-        coffee.put("price", price);
+        coffeeId = coffeeId + 1;
+        coffeeDto.setCoffeeId(coffeeId);
 
-        coffees.put(coffeeId, coffee);
-
+        coffees.put(coffeeId, coffeeDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -60,24 +52,22 @@ public class CoffeeController {
         // 조회하려는 커피가 있는지 확인합니다.
         if (!coffees.containsKey(coffeeId)) return new ResponseEntity(HttpStatus.NOT_FOUND);
 
-        Map<String, Object> coffee = coffees.get(coffeeId);
+        CoffeeDto coffee = (CoffeeDto) coffees.get(coffeeId);
         return new ResponseEntity<>(coffee, HttpStatus.OK);
     }
 
     @PatchMapping("/{coffee-id}")
     public ResponseEntity patchCoffee(@PathVariable("coffee-id") long coffeeId,
-                                    @RequestParam(value = "korName", required = false) String korName,
-                                    @RequestParam(value = "engName", required = false) String engName,
-                                    @RequestParam(value = "price", required = false) Long price) {
+                                      @RequestBody CoffeeDto coffeeDto) {
 
         // 변경하려는 커피가 있는지 확인합니다.
         if (!coffees.containsKey(coffeeId)) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         // coffees 에서 coffeeId 로 coffee 를 찾습니다.
-        Map<String, Object> coffee = coffees.get(coffeeId);
-        if (korName != null) coffee.replace("korName", korName);
-        if (engName != null) coffee.replace("engName", engName);
-        if (price != null) coffee.replace("price", price);
+        CoffeeDto coffee = coffees.get(coffeeId);
+        if (coffee.getKorName() != null) coffee.setKorName(coffeeDto.getKorName());
+        if (coffee.getEngName() != null) coffee.setEngName(coffeeDto.getEngName());
+        if (coffee.getPrice() != null) coffee.setPrice(coffeeDto.getPrice());
         coffees.replace(coffeeId, coffee);
 
         return new ResponseEntity<>(coffee, HttpStatus.OK);
