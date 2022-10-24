@@ -2,19 +2,23 @@ package com.codestates.section3week1.member;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/v1/members")
+@Validated
 public class MemberController {
-    private final Map<Long, MemberDto> members = new HashMap<>();
     // Mock data
     // memberId 는 고유한 값
     private long memberId = 0;
+    private final Map<Long, MemberDto> members = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -29,7 +33,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity postMember(@RequestBody MemberDto memberDto) {
+    public ResponseEntity postMember(@Valid @RequestBody MemberDto memberDto) {
         System.out.printf("# email: %s%n", memberDto.getEmail());
         System.out.printf("# name: %s%n", memberDto.getName());
         System.out.printf("# phone: %s%n", memberDto.getPhone());
@@ -50,19 +54,19 @@ public class MemberController {
         // 조회하려는 멤버가 있는지 확인합니다.
         if (!members.containsKey(memberId)) return new ResponseEntity(HttpStatus.NOT_FOUND);
 
-        MemberDto member = members.get(memberId);
+        MemberDto member = (MemberDto) members.get(memberId);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") long memberId,
-                                      @RequestBody MemberDto memberDto) {
+    public ResponseEntity patchMember(@PathVariable("member-id") @Min(2) long memberId,
+                                      @Valid @RequestBody MemberDto memberDto) {
 
         // 변경하려는 멤버가 있는지 확인합니다.
         if (!members.containsKey(memberId)) return new ResponseEntity(HttpStatus.NOT_FOUND);
 
         // members 에서 memberId 로 member 를 찾습니다.
-        MemberDto member = members.get(memberId);
+        MemberDto member =  members.get(memberId);
         if (memberDto.getName() != null) member.setName(memberDto.getName());
         if (memberDto.getPhone() != null) member.setPhone(memberDto.getPhone());
         members.replace(memberId, member);

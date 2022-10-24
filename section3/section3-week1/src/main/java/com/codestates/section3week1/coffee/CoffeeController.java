@@ -2,14 +2,18 @@ package com.codestates.section3week1.coffee;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/v1/coffees")
+@Validated
 public class CoffeeController {
     // Mock data
     // coffeeId 는 고유한 값
@@ -29,7 +33,7 @@ public class CoffeeController {
     }
 
     @PostMapping
-    public ResponseEntity postCoffee(@RequestBody CoffeeDto coffeeDto) {
+    public ResponseEntity postCoffee(@Valid @RequestBody CoffeeDto coffeeDto) {
         System.out.printf("# engName: %s%n", coffeeDto.getEngName());
         System.out.printf("# korName: %s%n", coffeeDto.getKorName());
         System.out.printf("# price: %s%n", coffeeDto.getPrice());
@@ -57,8 +61,8 @@ public class CoffeeController {
     }
 
     @PatchMapping("/{coffee-id}")
-    public ResponseEntity patchCoffee(@PathVariable("coffee-id") long coffeeId,
-                                      @RequestBody CoffeeDto coffeeDto) {
+    public ResponseEntity patchCoffee(@PathVariable("coffee-id") @Positive long coffeeId,
+                                      @Valid @RequestBody CoffeeDto coffeeDto) {
 
         // 변경하려는 커피가 있는지 확인합니다.
         if (!coffees.containsKey(coffeeId)) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
