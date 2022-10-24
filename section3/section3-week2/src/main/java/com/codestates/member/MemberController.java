@@ -11,13 +11,13 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/v2/members")
+@RequestMapping("/v3/members")
 @Validated
 public class MemberController {
     private final MemberService memberService;
 
-    public MemberController() {
-        this.memberService = new MemberService();
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @PostMapping
