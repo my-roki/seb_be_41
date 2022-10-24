@@ -1,5 +1,11 @@
-package com.codestates.member;
+package com.codestates.member.controller;
 
+import com.codestates.member.dto.MemberPatchDto;
+import com.codestates.member.dto.MemberPostDto;
+import com.codestates.member.dto.MemberResponseDto;
+import com.codestates.member.entity.Member;
+import com.codestates.member.mapper.MemberMapper;
+import com.codestates.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

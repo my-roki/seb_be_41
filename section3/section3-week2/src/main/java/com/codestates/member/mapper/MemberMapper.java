@@ -1,5 +1,9 @@
-package com.codestates.member;
+package com.codestates.member.mapper;
 
+import com.codestates.member.entity.Member;
+import com.codestates.member.dto.MemberPatchDto;
+import com.codestates.member.dto.MemberPostDto;
+import com.codestates.member.dto.MemberResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
