@@ -7,15 +7,29 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 
 @RestController
-@RequestMapping("/v1/members")
+@RequestMapping("/v2/members")
 @Validated
 public class MemberController {
+    private final MemberService memberService;
+
+    public MemberController() {
+        this.memberService = new MemberService();
+    }
+
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
-        return new ResponseEntity<>(memberPostDto, HttpStatus.CREATED);
+        Member member = new Member();
+        member.setEmail(memberPostDto.getEmail());
+        member.setName(memberPostDto.getName());
+        member.setPhone(memberPostDto.getPhone());
+
+        Member response = memberService.createMember(member);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{member-id}")
@@ -23,33 +37,35 @@ public class MemberController {
                                       @Valid @RequestBody MemberPatchDto memberPatchDto) {
         memberPatchDto.setMemberId(memberId);
 
-        // No need Business logic
+        Member member = new Member();
+        member.setMemberId(memberPatchDto.getMemberId());
+        member.setName(memberPatchDto.getName());
+        member.setPhone(memberPatchDto.getPhone());
 
-        return new ResponseEntity<>(memberPatchDto, HttpStatus.OK);
+        Member response = memberService.updateMember(member);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
-        System.out.println("# memberId: " + memberId);
+        Member response = memberService.findMember(memberId);
 
-        // not implementation
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity getMembers() {
-        System.out.println("# get Members");
+        List<Member> response = memberService.findMembers();
 
-        // not implementation
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
         System.out.println("# deleted memberId: " + memberId);
-        // No need business logic
+        memberService.deleteMember(memberId);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

@@ -37,7 +37,7 @@ public class MemberService {
         return members;
     }
 
-    public void deleteMember(Member member) {
+    public void deleteMember(long memberId) {
         // TODO should business logic
 
     }
