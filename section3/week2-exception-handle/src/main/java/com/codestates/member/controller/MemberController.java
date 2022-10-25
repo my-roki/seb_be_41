@@ -6,19 +6,14 @@ import com.codestates.member.dto.MemberResponseDto;
 import com.codestates.member.entity.Member;
 import com.codestates.member.mapper.MemberMapper;
 import com.codestates.member.service.MemberService;
-import com.codestates.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -81,30 +76,5 @@ public class MemberController {
         memberService.deleteMember(memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity handlerException(MethodArgumentNotValidException e) {
-        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
-
-        List<ErrorResponse.FieldError> errors = fieldErrors.stream()
-                .map(error -> new ErrorResponse.FieldError(
-                        error.getField(),
-                        error.getRejectedValue(),
-                        error.getDefaultMessage()))
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity handleException(ConstraintViolationException e) {
-        /**
-         * - ConstraintViolationException 클래스는 getBindingResult().getFieldErrors()
-         * 와 같이 에러 정보를 얻을 수 없다.
-         * - MethodArgumentNotValidException과 다르게 또 다른 방식으로 처리가 필요.
-         */
-
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 }
