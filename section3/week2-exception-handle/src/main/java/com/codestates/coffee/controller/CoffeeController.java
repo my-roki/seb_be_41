@@ -6,9 +6,12 @@ import com.codestates.coffee.dto.CoffeeResponseDto;
 import com.codestates.coffee.entity.Coffee;
 import com.codestates.coffee.mapper.CoffeeMapper;
 import com.codestates.coffee.service.CoffeeService;
+import com.codestates.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/v5/coffees")
+@RequestMapping("/v6/coffees")
 @Validated
 public class CoffeeController {
     private CoffeeService coffeeService;
@@ -64,5 +67,19 @@ public class CoffeeController {
         coffeeService.deleteCoffee(coffeeId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handlerException(MethodArgumentNotValidException e) {
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+
+        List<ErrorResponse.FieldError> errors = fieldErrors.stream()
+                .map(error -> new ErrorResponse.FieldError(
+                        error.getField(),
+                        error.getRejectedValue(),
+                        error.getDefaultMessage()))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
     }
 }
