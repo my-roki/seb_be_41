@@ -5,11 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * V2
- *  - 메서드 구현
- *  - DI 적용
- */
 @Service
 public class MemberService {
     public Member createMember(Member member) {
@@ -32,9 +27,7 @@ public class MemberService {
         // TODO should business logic
 
         // TODO member 객체는 나중에 DB에서 조회 하는 것으로 변경 필요.
-        Member member =
-                new Member(memberId, "hgd@gmail.com", "홍길동", "010-1234-5678");
-        return member;
+        throw new RuntimeException("Not found member");
     }
 
     public List<Member> findMembers() {
