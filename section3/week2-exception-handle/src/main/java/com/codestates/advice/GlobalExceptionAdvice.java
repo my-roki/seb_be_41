@@ -1,5 +1,6 @@
 package com.codestates.advice;
 
+import com.codestates.exception.BusinessLogicException;
 import com.codestates.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,11 +31,15 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
+    // BusinessLogicException
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleResourceNotFoundException(RuntimeException e) {
+    public ErrorResponse handleBusinessLogicException(BusinessLogicException e) {
+        System.out.println(e.getExceptionCode().getStatus());
         System.out.println(e.getMessage());
 
-        return null;
+        ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
+
+        return response;
     }
 }

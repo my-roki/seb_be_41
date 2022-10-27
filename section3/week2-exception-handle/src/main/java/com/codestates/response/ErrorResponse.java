@@ -1,5 +1,6 @@
 package com.codestates.response;
 
+import com.codestates.exception.ExceptionCode;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;
 
@@ -10,6 +11,8 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ErrorResponse {
+    private int status;
+    private String message;
     private List<FieldError> fieldErrors;  // MethodArgumentNotValidException 으로부터 발생하는 에러 정보를 담는 멤버 변수
     private List<ConstraintViolationError> constraintViolationErrors;  // ConstraintViolationException 으로부터 발생하는 에러 정보를 담는 멤버변수
 
@@ -17,6 +20,11 @@ public class ErrorResponse {
                           final List<ConstraintViolationError> constraintViolationErrors) {
         this.fieldErrors = fieldErrors;
         this.constraintViolationErrors = constraintViolationErrors;
+    }
+
+    private ErrorResponse(final int status, final String message) {
+        this.status = status;
+        this.message = message;
     }
 
     // MethodArgumentNotValidException 에 대한 ErrorResponse 객체 생성
@@ -27,6 +35,11 @@ public class ErrorResponse {
     // ConstraintViolationError 에 대한 ErrorResponse 객체 생성
     public static ErrorResponse of(Set<ConstraintViolation<?>> violations) {
         return new ErrorResponse(null, ConstraintViolationError.of(violations));
+    }
+
+    // CustomException 에 대한 ErrorResponse 객체 생성
+    public static ErrorResponse of(ExceptionCode code) {
+        return new ErrorResponse(code.getStatus(), code.getMessage());
     }
 
     @Getter

@@ -1,5 +1,7 @@
 package com.codestates.member.service;
 
+import com.codestates.exception.BusinessLogicException;
+import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,7 @@ public class MemberService {
         // TODO should business logic
 
         // TODO member 객체는 나중에 DB에서 조회 하는 것으로 변경 필요.
-        throw new RuntimeException("Not found member");
+        throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
     }
 
     public List<Member> findMembers() {
