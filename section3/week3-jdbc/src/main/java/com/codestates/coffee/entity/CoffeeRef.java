@@ -8,6 +8,6 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @Table("ORDER_COFFEE")
 public class CoffeeRef {
-    private long coffeeId;
+    private long coffeeId;   // N대N 관계에서는 AggregateReference 로 감쌀 필요가 없습니다.
     private int quantity;
 }
