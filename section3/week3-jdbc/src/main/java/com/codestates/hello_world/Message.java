@@ -9,5 +9,5 @@ import org.springframework.data.annotation.Id;
 public class Message {
     @Id
     private long messageId;
-    private  String message;
+    private String message;
 }
