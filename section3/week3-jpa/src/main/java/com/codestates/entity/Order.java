@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,6 +41,12 @@ public class Order {
         this.member = member;
     }
 
+    @OneToMany(mappedBy = "order")
+    private List<CoffeeRef> coffeeRefList = new ArrayList<>();
+
+    public void addCoffeeRef(CoffeeRef CoffeeRef) {
+        coffeeRefList.add(CoffeeRef);
+    }
 
     public enum OrderStatus {
         ORDER_REQUEST(1, "주문 요청"),

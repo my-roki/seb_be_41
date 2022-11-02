@@ -39,10 +39,6 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orderList = new ArrayList<>();
 
-    public Member(String email) {
-        this.email = email;
-    }
-
     public Member(String email, String name, String phone) {
         this.email = email;
         this.name = name;

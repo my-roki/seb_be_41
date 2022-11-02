@@ -33,4 +33,11 @@ public class Coffee {
 
     @Column(nullable = false, name = "LAST_MODIFIED_AT")
     private LocalDateTime modifiedAt = LocalDateTime.now();
+
+    public Coffee(String korName, String engName, int price, String coffeeCode){
+        this.korName = korName;
+        this.engName = engName;
+        this.price = price;
+        this.coffeeCode = coffeeCode;
+    }
 }
