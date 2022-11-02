@@ -29,6 +29,17 @@ public class Order {
     @Column(nullable = false, name = "LAST_MODIFIED_AT")
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
+    // @ManyToOne 어노테이션을 통해 다대일 관계를 명시합니다.
+    // @JoinColumn 어노테이션으로 ORDERS 테이블에서 외래키에 해당하는 컬럼명을 적어줍니다.
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    public void addMember(Member member) {
+        this.member = member;
+    }
+
+
     public enum OrderStatus {
         ORDER_REQUEST(1, "주문 요청"),
         ORDER_CONFIRM(2, "주문 확정"),

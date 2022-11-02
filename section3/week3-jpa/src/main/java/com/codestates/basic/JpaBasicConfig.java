@@ -1,6 +1,7 @@
 package com.codestates.basic;
 
 import com.codestates.entity.Member;
+import com.codestates.entity.Order;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,30 +21,36 @@ public class JpaBasicConfig {
         this.tx = em.getTransaction();
 
         return args -> {
-            // testEmailNotNull();  // error
-            // testEmailUpdatable();  // UPDATE 쿼리가 발생하지 않음
-            // testEmailUnique();  // error
+            example();
         };
     }
 
-    private void testEmailNotNull() {
+    private void example() {
         tx.begin();
-        em.persist(new Member());
-        tx.commit();
-    }
+        Member member = new Member("roki@hello.com", "roki", "010-1111-2222");
+        em.persist(member);
 
-    private void testEmailUpdatable() {
-        tx.begin();
-        em.persist(new Member("hgd@gmail.com", "", ""));
-        Member member = em.find(Member.class, 1L);
-        member.setEmail("hgd@yahoo.co.kr");
-        tx.commit();
-    }
+        Order order = new Order();
+        order.addMember(member);
 
-    private void testEmailUnique() {
-        tx.begin();
-        em.persist(new Member("hgd@gmail.com", "", ""));
-        em.persist(new Member("hgd@gmail.com", "", ""));
+        // member 객체에 order 객체를 추가해주지 않아도 테이블에는 정상적으로 업데이트 됩니다.
+        // 하지만 find 메서드로 조회시 1차 캐시에 저장된 객테를 가져오는데 거기에는 order 정보가 들어있지 않습니다.
+        member.addOrder(order);
+
+        em.persist(order);
         tx.commit();
+
+        Order findOrder = em.find(Order.class, 1L);
+        System.out.printf("Find order: %s, %s, %s%n",
+                findOrder.getMember().getMemberId(),
+                findOrder.getMember().getEmail(),
+                findOrder.getMember().getName());
+
+        Member findMember = em.find(Member.class, 1L);
+        findMember.getOrderList().stream()
+                .forEach(memberOrder ->
+                        System.out.printf("Member's order: %s, %s%n",
+                                memberOrder.getOrderId(), memberOrder.getOrderStatus()
+                        ));
     }
 }
