@@ -20,18 +20,30 @@ public class JpaBasicConfig {
         this.tx = em.getTransaction();
 
         return args -> {
-            example();
+            // testEmailNotNull();  // error
+            // testEmailUpdatable();  // UPDATE 쿼리가 발생하지 않음
+            // testEmailUnique();  // error
         };
     }
 
-    private void example() {
-        // 각각의 전략에 따라 로그가 어떻게 찍히는지 차이를 예의주시해보자.
+    private void testEmailNotNull() {
         tx.begin();
-        em.persist(new Member("roki@hello.com"));
+        em.persist(new Member());
         tx.commit();
+    }
 
-        Member member = em.find(Member.class, 1L);  // 기본키를 직접 할당해서 엔티티를 저장
+    private void testEmailUpdatable() {
+        tx.begin();
+        em.persist(new Member("hgd@gmail.com", "", ""));
+        Member member = em.find(Member.class, 1L);
+        member.setEmail("hgd@yahoo.co.kr");
+        tx.commit();
+    }
 
-        System.out.printf("id: %s%nemail: %s%n", member.getMemberId(), member.getEmail());
+    private void testEmailUnique() {
+        tx.begin();
+        em.persist(new Member("hgd@gmail.com", "", ""));
+        em.persist(new Member("hgd@gmail.com", "", ""));
+        tx.commit();
     }
 }
