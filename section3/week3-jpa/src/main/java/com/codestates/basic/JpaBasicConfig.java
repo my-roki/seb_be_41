@@ -26,18 +26,11 @@ public class JpaBasicConfig {
 
     private void example() {
         tx.begin();
-        Member createMember = new Member("roki@hello.com");
-        em.persist(createMember);  // member1 객체를 영속성 컨텍스트에 저장.
-        tx.commit();  // 지연 SQL 저장소에 등록된 INSERT 쿼리 실행.
+        em.persist(new Member(1L, "roki@hello.com"));
+        tx.commit();
 
-        tx.begin();
-        Member updateMember = em.find(Member.class, 1L);  // 테이블에 저장된 member 객체를 영속성 컨텍스트의 1차 캐시에서 조회
-        updateMember.setEmail("toki@hello.com");  // setter 메서드로 이메일 정보를 변경
-        tx.commit();  // 지연 SQL 저장소에 등록된 UPDATE 쿼리가 실행
+        Member member = em.find(Member.class, 1L);  // 기본키를 직접 할당해서 엔티티를 저장
 
-        tx.begin();
-        Member deleteMember = em.find(Member.class, 1L);  // 테이블에 저장된 Member 클래스의 객체를 영속성 컨텍스트의 1차 캐시에서 조회
-        em.remove(deleteMember);  //  영속성 컨텍스트의 1차 캐시에 있는 엔티티를 제거를 요청
-        tx.commit();  // 영속성 컨텍스트의 1차 캐시에 있는 엔티티를 제거하고, 쓰기 지연 SQL 저장소에 등록된 DELETE 쿼리가 실행
+        System.out.printf("id: %s%nemail: %s%n", member.getMemberId(), member.getEmail());
     }
 }
