@@ -39,6 +39,9 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orderList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "member")
+    private Stamp stamp;
+
     public Member(String email, String name, String phone) {
         this.email = email;
         this.name = name;
@@ -47,5 +50,9 @@ public class Member {
 
     public void addOrder(Order order) {
         orderList.add(order);
+    }
+
+    public void addStamp(Stamp stamp) {
+        this.stamp = stamp;
     }
 }
