@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -15,13 +12,15 @@ import javax.persistence.Table;
 @Entity(name = "USERS")
 @Table(name = "USERS")
 public class Member {
-    // @Id 애너테이션만 추가하면 기본적으로 기본키 직접 할당 전략이 적용됩니다.
+    // @GeneratedValue 애너테이션의 strategy 애트리뷰트의 값을 지정
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long memberId;
     private String email;
 
-    public Member(long memberId, String  email) {
-        this.memberId = memberId;
+    public Member(String email) {
         this.email = email;
     }
 }

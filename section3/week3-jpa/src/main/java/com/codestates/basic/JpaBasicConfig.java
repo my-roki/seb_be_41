@@ -25,8 +25,9 @@ public class JpaBasicConfig {
     }
 
     private void example() {
+        // 각각의 전략에 따라 로그가 어떻게 찍히는지 차이를 예의주시해보자.
         tx.begin();
-        em.persist(new Member(1L, "roki@hello.com"));
+        em.persist(new Member("roki@hello.com"));
         tx.commit();
 
         Member member = em.find(Member.class, 1L);  // 기본키를 직접 할당해서 엔티티를 저장
