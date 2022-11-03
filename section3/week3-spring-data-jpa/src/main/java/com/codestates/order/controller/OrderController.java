@@ -1,6 +1,7 @@
 package com.codestates.order.controller;
 
 import com.codestates.coffee.service.CoffeeService;
+import com.codestates.order.dto.OrderPatchDto;
 import com.codestates.response.MultiResponseDto;
 import com.codestates.response.SingleResponseDto;
 import com.codestates.order.dto.OrderPostDto;
@@ -42,6 +43,18 @@ public class OrderController {
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.orderToOrderResponseDto(order, null)),
                 HttpStatus.CREATED);
+    }
+
+    @PatchMapping("{order-id}")
+    public ResponseEntity patchOrder(@PathVariable("order-id") @Positive long orderId,
+                                     @Valid @RequestBody OrderPatchDto orderPatchDto) {
+        orderPatchDto.setOrderId(orderId);
+        Order order = orderService.updateOrder(mapper.orderPatchDtoToOrder(orderPatchDto));
+
+        // TODO JPA에 맞춰서 coffee 정보 변경 필요
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.orderToOrderResponseDto(order, null))
+                , HttpStatus.OK);
     }
 
     @GetMapping("/{order-id}")
