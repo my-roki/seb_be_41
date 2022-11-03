@@ -24,6 +24,7 @@ public class OrderService {
     }
 
     public Order createOrder(Order order) {
+        System.out.println(order.getMember());
         memberService.findVerifiedMember(order.getMember().getMemberId());
 
         // TODO: 커피가 존재해야하는지 확인해야 함.

@@ -51,7 +51,7 @@ public class CoffeeService {
     }
 
     public Page<Coffee> findCoffees(int page, int size) {
-        return coffeeRepository.findAll(PageRequest.of(size, page,
+        return coffeeRepository.findAll(PageRequest.of(page, size,
                 Sort.by("coffeeId").descending()));
     }
 

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Coffee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long CoffeeId;
+    private Long coffeeId;
 
     @Column(nullable = false, length = 100)
     private String korName;

@@ -53,7 +53,7 @@ public class Member {
     }
 
     public void addOrder(Order order) {
-        orders.add(order);
+        this.orders.add(order);
     }
 
     public enum MemberStatus {
