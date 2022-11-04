@@ -3,22 +3,26 @@ package com.codestates.order.service;
 import com.codestates.coffee.service.CoffeeService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.member.entity.Member;
 import com.codestates.member.service.MemberService;
 import com.codestates.order.entity.Order;
 import com.codestates.order.repository.OrderRepository;
+import com.codestates.stamp.Stamp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@Transactional  // OrderService 내 메서드에 트랜잭션 사용
 public class OrderService {
     private final MemberService memberService;
     private final OrderRepository orderRepository;
     private final CoffeeService coffeeService;
+
     public OrderService(MemberService memberService,
                         OrderRepository orderRepository,
                         CoffeeService coffeeService) {
@@ -29,8 +33,13 @@ public class OrderService {
 
     public Order createOrder(Order order) {
         verifyOrder(order);
+        Order createOrder = orderRepository.save(order);
+        updateStamp(order);
 
-        return orderRepository.save(order);
+        // 주문 생성 과정에서 에러 발생 -> updateStamp 는 MemberService 클래스를 참조하기 때문에 그쪽에서도 롤백이 이뤄져야합니다.
+        if (true) throw new RuntimeException("rollback test");
+
+        return createOrder;
     }
 
     public Order updateOrder(Order order) {
@@ -79,4 +88,19 @@ public class OrderService {
                 .forEach(orderCoffee -> coffeeService.
                         findVerifiedCoffee(orderCoffee.getCoffee().getCoffeeId()));
     }
+
+    private void updateStamp(Order order) {
+        Member member = memberService.findMember(order.getMember().getMemberId());
+        int stampCount =
+                order.getOrderCoffees().stream()
+                        .map(orderCoffee -> orderCoffee.getQuantity())
+                        .mapToInt(quantity -> quantity)
+                        .sum();
+        Stamp stamp = member.getStamp();
+        stamp.setStampCount(stamp.getStampCount() + stampCount);
+        member.setStamp(stamp);
+
+        memberService.updateMember(member);
+    }
+
 }

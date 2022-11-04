@@ -8,15 +8,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 /**
- *  - 메서드 구현
- *  - DI 적용
- *  - Spring Data JPA 적용
+ * - 메서드 구현
+ * - DI 적용
+ * - Spring Data JPA 적용
  */
+// 클래스 레벨에 @Transactional을 적용하면 해당 클래스 내의 메서드들에 대하여 트랜잭션 기능 적용!
 @Service
+@Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
 
@@ -27,10 +31,19 @@ public class MemberService {
     public Member createMember(Member member) {
         // 이미 등록된 이메일인지 확인
         verifyExistsEmail(member.getEmail());
+        Member createMember = memberRepository.save(member);
 
-        return memberRepository.save(member);
+        // 의도적으로 예외를 발생시켜 롤백이 잘 되는지 확인
+        if (true) {
+            throw new RuntimeException("Roll back");
+        }
+
+        return createMember;
     }
 
+    // Propagation.REQUIRED를 지정하면 메서드 실행 시, 현재 진행 중인 트랜잭션이 존재하면 해당 트랜잭션을 사용하고,
+    // 존재하지 않으면 새 트랜잭션을 생성하도록 해줍니다.
+    @Transactional(propagation = Propagation.REQUIRED)
     public Member updateMember(Member member) {
         Member findMember = findVerifiedMember(member.getMemberId());
 
