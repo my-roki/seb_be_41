@@ -12,12 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
-@Transactional  // OrderService 내 메서드에 트랜잭션 사용
 public class OrderService {
     private final MemberService memberService;
     private final OrderRepository orderRepository;
@@ -35,9 +33,6 @@ public class OrderService {
         verifyOrder(order);
         Order createOrder = orderRepository.save(order);
         updateStamp(order);
-
-        // 주문 생성 과정에서 에러 발생 -> updateStamp 는 MemberService 클래스를 참조하기 때문에 그쪽에서도 롤백이 이뤄져야합니다.
-        if (true) throw new RuntimeException("rollback test");
 
         return createOrder;
     }

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -20,8 +19,6 @@ public class CoffeeService {
         this.coffeeRepository = coffeeRepository;
     }
 
-    // 메서드 레벨에서 트랜잭션 적용시 해당 메서드에 대해서만 트랜잭션 적용!
-    @Transactional
     public Coffee createCoffee(Coffee coffee) {
         // 커피 코드를 대문자로 변경
         String coffeeCode = coffee.getCoffeeCode().toUpperCase();
@@ -54,9 +51,6 @@ public class CoffeeService {
         return coffeeRepository.save(findCoffee);
     }
 
-    // @Transactional(readOnly = true) 로 설정하면 JPA 내부적으로 영속성 컨텍스트를 flush하지 않고, 변경 감지를 위한 스냅샷 생성도 진행하지 않습니다.
-    // flush 처리를 하지 않고, 스냅샷도 생성하지 않으므로 불필요한 추가 동작을 줄일 수 있습니다.
-    @Transactional(readOnly = true)
     public Coffee findCoffee(long coffeeId) {
         return findVerifiedCoffeeByQuery(coffeeId);
     }
