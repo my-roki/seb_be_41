@@ -1,5 +1,8 @@
 package com.codestates.member.service;
 
+import com.codestates.backup.entity.BackupMember;
+import com.codestates.backup.repository.BackupMemberRepository;
+import com.codestates.backup.service.BackupMemberService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
@@ -8,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,18 +20,24 @@ import java.util.Optional;
  * - DI 적용
  * - Spring Data JPA 적용
  */
+@Transactional
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final BackupMemberRepository backupMemberRepository;
+    private final BackupMemberService backupMemberService;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, BackupMemberRepository backupMemberRepository, BackupMemberService backupMemberService) {
         this.memberRepository = memberRepository;
+        this.backupMemberRepository = backupMemberRepository;
+        this.backupMemberService = backupMemberService;
     }
 
     public Member createMember(Member member) {
         // 이미 등록된 이메일인지 확인
         verifyExistsEmail(member.getEmail());
         Member createMember = memberRepository.save(member);
+        backupMemberService.createBackupMember(new BackupMember(member.getEmail(), member.getName(), member.getPhone()));
 
         return createMember;
     }

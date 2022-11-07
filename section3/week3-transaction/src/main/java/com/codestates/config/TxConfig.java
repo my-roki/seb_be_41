@@ -55,6 +55,12 @@ public class TxConfig {
         pointcut.setExpression("execution(* com.codestates.coffee.service." +
                 "CoffeeService.*(..))");
 
+        // 분산 트랜잭션 적용을 위해 AOP 설정에 MemberService, BackupMemberService 추가
+        pointcut.setExpression("execution(* com.codestates.member.service." +
+                "MemberService.*(..))");
+        pointcut.setExpression("execution(* com.codestates.backup.service." +
+                "BackupMemberService.*(..))");
+
         return new DefaultPointcutAdvisor(pointcut, txAdvice());
     }
 }
