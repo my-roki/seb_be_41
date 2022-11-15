@@ -51,6 +51,8 @@ System.out.println(output); // --> 4 ([1, 1, 1, 1], [1, 1, 2], [2, 2], [1, 3])
 - coinChange를 계산하는 효율적인 알고리즘(`O(M * N)`)이 존재합니다(`total`과 `coins.length`가 N, M일 경우). 쉽지 않기 때문에 바로 레퍼런스 코드를 보고 이해하는 데 집중하시기 바랍니다.
  */
 
+import java.util.Arrays;
+
 public class Q_46_coinChange {
     public static void main(String[] args) {
         // write test case here
@@ -69,8 +71,23 @@ public class Q_46_coinChange {
     }
 
     public int coinChange(int total, int[] coins) {
-        // TODO :
-        return 1;
-    }
+        // Dynamic Programming
+        int[][] table = new int[total + 1][coins.length];  // 0 ~ total까지 dp의 결과를 기록할 수 있는 테이블 생성
+        for (int i = 0; i < coins.length; i++) table[0][i] = 1;  // 0을 만드는 경우는 1가지(암것도 안 하는 것)
 
+        // 작은 수부터 동전으로 만들 수 있는 경우의 수를 조합해나갑니다.
+        for (int number = 1; number < total + 1; number++) {
+            for (int idx = 0; idx < coins.length; idx++) {
+                int candidate = 0;
+                if (number >= coins[idx]) candidate = table[number - coins[idx]][idx];
+
+                // 중복인 경우는 제외해야합니다.
+                int overwrite = 0;
+                if (idx >= 1) overwrite = table[number][idx - 1];
+
+                table[number][idx] = candidate + overwrite;
+            }
+        }
+        return table[total][coins.length - 1];
+    }
 }
