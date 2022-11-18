@@ -6,10 +6,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+/**
+ * 회원가입 폼을 만들기 위한 설계 과정
+ * 1. PasswordEncoder(Spring Security에서 제공하는 패스워드 암호화 컴포넌트) Bean 등록
+ * 2. MemberService Bean 등록을 위한 JavaConfiguration 구성
+ * 3. InMemoryMemberService 클래스 구현
+ */
 @Configuration
 public class SecurityConfiguration {
     // Note. Spring Security 설정을 진행합니다.
@@ -55,4 +64,10 @@ public class SecurityConfiguration {
         // Note. 현재 개발환경은 메모리 상에서 UserDetails를 관리하므로 InMemoryUserDetailsManager 라는 구현체를 사용합니다.
         return new InMemoryUserDetailsManager(admin, user);
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
 }
