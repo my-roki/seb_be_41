@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Member extends Auditable {
+public class Member extends Auditable implements Principal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -31,6 +32,8 @@ public class Member extends Auditable {
     @Column(length = 20, nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
+    //  Note. List, Set 같은 컬렉션 타입의 필드는 @ElementCollection 애너테이션을 추가하면
+    //  User 권한 정보와 관련된 별도의 엔티티 클래스를 생성하지 않아도 간단하게 매핑 처리가 됩니다.
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
@@ -42,6 +45,11 @@ public class Member extends Auditable {
         this.email = email;
         this.fullName = fullName;
         this.password = password;
+    }
+
+    @Override
+    public String getName() {
+        return getEmail();
     }
 
     public enum MemberStatus {

@@ -30,8 +30,49 @@ public class HelloUserDetailsService implements UserDetailsService {
         Optional<Member> optionalMember = memberRepository.findByEmail(username);
         Member member = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        Collection<? extends GrantedAuthority> authorities = authorityUtils.createdAuthorities(member.getEmail());
+        Collection<? extends GrantedAuthority> authorities = authorityUtils.createAuthorities(member.getEmail());
 
-        return new User(member.getEmail(), member.getPassword(), authorities);
+        return new HelloUserDetails(member);
+    }
+
+    // Note. 데이터베이스에서 조회한 회원 정보를 Spring Security의 User 정보로 변환하는 과정과 User의 권한 정보를 생성하는 과정을 캡슐화 할 수 있습니다.
+    private final class HelloUserDetails extends Member implements UserDetails {
+        HelloUserDetails(Member member) {
+            setMemberId(member.getMemberId());
+            setFullName(member.getFullName());
+            setEmail(member.getEmail());
+            setPassword(member.getPassword());
+            setRoles(member.getRoles());
+        }
+
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return authorityUtils.createAuthorities(this.getRoles());
+        }
+
+        @Override
+        public String getUsername() {
+            return getEmail();
+        }
+
+        @Override
+        public boolean isAccountNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return true;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
     }
 }
