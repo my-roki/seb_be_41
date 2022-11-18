@@ -26,7 +26,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // Note. HttpSecurity를 통해 Http 요청에 대한 보안 설정을 구성합니다.
-        httpSecurity.csrf().disable()  // CSRF 공격에 대한 Spring Security 설정 비활성화
+        httpSecurity.headers().frameOptions().sameOrigin() // 동일 출처로부터 들어오는 request만 페이지 렌더링을 허용
+                .and()
+                .csrf().disable()  // CSRF 공격에 대한 Spring Security 설정 비활성화
                 .formLogin()  // 기본적인 인증방법 설정
                 .loginPage("/auths/login-form")  // 핸들러 메서드에 요청을 전송하는 요청 URL
                 .loginProcessingUrl("/process_login") // 메서드를 통해 로그인 인증 요청을 수행할 요청 URL
@@ -45,24 +47,6 @@ public class SecurityConfiguration {
                         .antMatchers("/**").permitAll());  // 나머지 Role에 상관 없이
 
         return httpSecurity.build();
-    }
-
-    @Bean
-    public UserDetailsManager userDetailsManager() {
-        UserDetails admin = User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("1234")
-                .roles("ADMIN")
-                .build();
-
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("1234")
-                .roles("USER")
-                .build();
-
-        // Note. 현재 개발환경은 메모리 상에서 UserDetails를 관리하므로 InMemoryUserDetailsManager 라는 구현체를 사용합니다.
-        return new InMemoryUserDetailsManager(admin, user);
     }
 
     @Bean
