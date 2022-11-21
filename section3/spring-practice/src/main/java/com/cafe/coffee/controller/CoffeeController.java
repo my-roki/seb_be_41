@@ -1,16 +1,18 @@
 package com.cafe.coffee.controller;
 
-import com.cafe.coffee.entity.Coffee;
-import com.cafe.coffee.service.CoffeeService;
 import com.cafe.coffee.dto.CoffeeDto;
+import com.cafe.coffee.entity.Coffee;
 import com.cafe.coffee.mapper.CoffeeMapper;
+import com.cafe.coffee.service.CoffeeService;
 import com.cafe.response.MultiResponseDto;
 import com.cafe.response.SingleResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -28,9 +30,10 @@ public class CoffeeController {
         this.mapper = mapper;
     }
 
-    @PostMapping
-    public ResponseEntity postCoffee(@Valid @RequestBody CoffeeDto.Post coffeePostDto) {
-        Coffee coffee = coffeeService.createCoffee(mapper.coffeePostDtoToCoffee(coffeePostDto));
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity postCoffee(@Valid @RequestPart(name = "coffeeData") CoffeeDto.Post coffeePostDto,
+                                     @RequestPart(name = "image") MultipartFile coffeeImage) {
+        Coffee coffee = coffeeService.createCoffee(mapper.coffeePostDtoToCoffee(coffeePostDto), coffeeImage);
         CoffeeDto.Response response = mapper.coffeeToCoffeeResponseDto(coffee);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);

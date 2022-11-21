@@ -7,9 +7,9 @@
 
 [//]: # (TODO 트랜잭션 기능 구현 : com.cafe.config)
 
-[//]: # (TODO email sender 기능 구현 com.cafe.utils.email)
+[//]: # (TODO email sender 기능 구현 : com.cafe.utils.email)
 
-[//]: # (TODO Event Listener com.cafe.utils.event )
+[//]: # (TODO Event Listener : com.cafe.utils.event )
 
 [//]: # (TODO Testing)
 
@@ -17,7 +17,7 @@
 
 [//]: # (TODO local / production 개발환경 분리)
 
-[//]: # (TODO File upload 기능 구현)
+[//]: # (TODO File upload 기능 구현 : com.cafe.coffee.service;com.cafe.coffee.service)
 
 [//]: # (TODO Rest Template 또는 WebClient)
 

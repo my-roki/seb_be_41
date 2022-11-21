@@ -4,7 +4,6 @@ import com.cafe.exception.BusinessLogicException;
 import com.cafe.exception.ExceptionCode;
 import com.cafe.member.entity.Member;
 import com.cafe.member.repository.MemberRepository;
-import com.cafe.utils.email.EmailSender;
 import com.cafe.utils.event.MemberRegistrationApplicationEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,10 +20,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
 
-    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher, EmailSender emailSender) {
+    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher) {
         this.memberRepository = memberRepository;
         this.publisher = publisher;
-        this.emailSender = emailSender;
     }
 
     public Member createMember(Member member) {

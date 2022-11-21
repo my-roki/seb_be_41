@@ -28,6 +28,9 @@ public class Coffee {
     @Column(nullable = false, length = 3, unique = true)
     private String coffeeCode;
 
+    @Column(length = 50)
+    private String coffeeImageName;
+
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private CoffeeStatus coffeeStatus = CoffeeStatus.COFFEE_FOR_SALE;

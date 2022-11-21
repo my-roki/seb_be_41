@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,16 +16,22 @@ import java.util.Optional;
 @Service
 public class CoffeeService {
     private CoffeeRepository coffeeRepository;
+    private StorageService storageService;
 
-    public CoffeeService(CoffeeRepository coffeeRepository) {
+    public CoffeeService(CoffeeRepository coffeeRepository, StorageService storageService) {
         this.coffeeRepository = coffeeRepository;
+        this.storageService = storageService;
     }
 
-    public Coffee createCoffee(Coffee coffee) {
+    public Coffee createCoffee(Coffee coffee, MultipartFile coffeeImage) {
         String coffeeCode = coffee.getCoffeeCode().toUpperCase();
+
+        // 커피 객체에 이미지 정보 추가
+        coffee.setCoffeeImageName(coffeeImage.getOriginalFilename());
 
         verifyCoffeeExistCode(coffeeCode);
         coffee.setCoffeeCode(coffeeCode);
+        storageService.store(coffeeImage);
 
         return coffeeRepository.save(coffee);
     }
