@@ -3,14 +3,13 @@ package com.codestates.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.*;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -51,7 +50,19 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        // return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
+        encoders.put("bcrypt", new BCryptPasswordEncoder());
+        encoders.put("noop", NoOpPasswordEncoder.getInstance());
+        encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
+        encoders.put("scrypt", new SCryptPasswordEncoder());
+        encoders.put("sha256", new StandardPasswordEncoder());
+
+        // 대표 인코더를 설정해서 사용자 맞춤 인코더를 설정 할 수 있습니다.
+        // noop ㄷㄷㄷ;;;
+        PasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("noop", encoders);
+
+        return passwordEncoder;
     }
 
 }
