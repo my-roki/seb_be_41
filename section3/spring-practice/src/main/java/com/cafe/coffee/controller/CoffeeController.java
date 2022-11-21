@@ -1,9 +1,9 @@
-package com.cafe.advice.coffee.controller;
+package com.cafe.coffee.controller;
 
-import com.cafe.advice.coffee.entity.Coffee;
-import com.cafe.advice.coffee.service.CoffeeService;
-import com.cafe.advice.coffee.dto.CoffeeDto;
-import com.cafe.advice.coffee.mapper.CoffeeMapper;
+import com.cafe.coffee.entity.Coffee;
+import com.cafe.coffee.service.CoffeeService;
+import com.cafe.coffee.dto.CoffeeDto;
+import com.cafe.coffee.mapper.CoffeeMapper;
 import com.cafe.response.MultiResponseDto;
 import com.cafe.response.SingleResponseDto;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,6 @@
-package com.cafe.advice.coffee.repository;
+package com.cafe.coffee.repository;
 
-import com.cafe.advice.coffee.entity.Coffee;
+import com.cafe.coffee.entity.Coffee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

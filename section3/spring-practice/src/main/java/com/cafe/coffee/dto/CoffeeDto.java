@@ -1,6 +1,6 @@
-package com.cafe.advice.coffee.dto;
+package com.cafe.coffee.dto;
 
-import com.cafe.advice.coffee.entity.Coffee;
+import com.cafe.coffee.entity.Coffee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;

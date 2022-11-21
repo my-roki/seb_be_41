@@ -1,7 +1,7 @@
-package com.cafe.advice.coffee.service;
+package com.cafe.coffee.service;
 
-import com.cafe.advice.coffee.entity.Coffee;
-import com.cafe.advice.coffee.repository.CoffeeRepository;
+import com.cafe.coffee.entity.Coffee;
+import com.cafe.coffee.repository.CoffeeRepository;
 import com.cafe.exception.BusinessLogicException;
 import com.cafe.exception.ExceptionCode;
 import org.springframework.data.domain.Page;

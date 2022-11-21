@@ -1,4 +1,4 @@
-package com.cafe.advice.coffee.entity;
+package com.cafe.coffee.entity;
 
 import com.cafe.order.entity.OrderCoffee;
 import lombok.Getter;

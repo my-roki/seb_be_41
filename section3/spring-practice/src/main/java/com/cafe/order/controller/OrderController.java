@@ -1,6 +1,6 @@
 package com.cafe.order.controller;
 
-import com.cafe.advice.coffee.service.CoffeeService;
+import com.cafe.coffee.service.CoffeeService;
 import com.cafe.response.MultiResponseDto;
 import com.cafe.response.SingleResponseDto;
 import com.cafe.order.dto.OrderDto;

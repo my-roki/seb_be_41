@@ -1,6 +1,6 @@
 package com.cafe.order.entity;
 
-import com.cafe.advice.coffee.entity.Coffee;
+import com.cafe.coffee.entity.Coffee;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -4,25 +4,46 @@ import com.cafe.exception.BusinessLogicException;
 import com.cafe.exception.ExceptionCode;
 import com.cafe.member.entity.Member;
 import com.cafe.member.repository.MemberRepository;
+import com.cafe.utils.email.EmailSender;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final EmailSender emailSender;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, EmailSender emailSender) {
         this.memberRepository = memberRepository;
+        this.emailSender = emailSender;
     }
 
     public Member createMember(Member member) {
         verifyMemberExistEmail(member.getEmail());
 
-        return memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+
+        // mail sender
+        try {
+            String[] to = new String[]{savedMember.getEmail()};
+            String subject = "Thank you for joining our cafe!";
+            String message = savedMember.getEmail() + "님, 회원 가입이 성공적으로 완료되었습니다.";
+            String templateName = "email-registration-member";
+            emailSender.sendEmail(to, subject, message, templateName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("MailSendException: rollback for Member Registration:");
+            deleteMember(savedMember.getMemberId());
+        }
+
+        return savedMember;
     }
 
     public Page<Member> findMembers(int page, int size) {

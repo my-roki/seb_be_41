@@ -1,6 +1,6 @@
 package com.cafe.order.mapper;
 
-import com.cafe.advice.coffee.entity.Coffee;
+import com.cafe.coffee.entity.Coffee;
 import com.cafe.member.entity.Member;
 import com.cafe.order.dto.OrderCoffeeResponseDto;
 import com.cafe.order.dto.OrderDto;

@@ -1,7 +1,7 @@
-package com.cafe.advice.coffee.mapper;
+package com.cafe.coffee.mapper;
 
-import com.cafe.advice.coffee.dto.CoffeeDto;
-import com.cafe.advice.coffee.entity.Coffee;
+import com.cafe.coffee.dto.CoffeeDto;
+import com.cafe.coffee.entity.Coffee;
 import org.mapstruct.Mapper;
 
 import java.util.List;

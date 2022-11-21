@@ -1,6 +1,6 @@
 package com.cafe.order.service;
 
-import com.cafe.advice.coffee.service.CoffeeService;
+import com.cafe.coffee.service.CoffeeService;
 import com.cafe.exception.BusinessLogicException;
 import com.cafe.exception.ExceptionCode;
 import com.cafe.member.entity.Member;

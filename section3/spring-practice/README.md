@@ -5,7 +5,7 @@
 
 [//]: # (TODO Stub Data 구현 : com.cafe.member.controller.stub)
 
-[//]: # (TODO 트랜잭션 기능 구현)
+[//]: # (TODO 트랜잭션 기능 구현 : com.cafe.config)
 
 [//]: # (TODO email sender 기능 구현)
 
