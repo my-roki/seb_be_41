@@ -7,9 +7,9 @@
 
 [//]: # (TODO 트랜잭션 기능 구현 : com.cafe.config)
 
-[//]: # (TODO email sender 기능 구현)
+[//]: # (TODO email sender 기능 구현 com.cafe.utils.email)
 
-[//]: # (TODO Event Listener)
+[//]: # (TODO Event Listener com.cafe.utils.event )
 
 [//]: # (TODO Testing)
 
@@ -22,3 +22,5 @@
 [//]: # (TODO Rest Template 또는 WebClient)
 
 [//]: # (TODO Spring BeanWrapper : design pattern)
+
+[//]: # (TODO Discord 메세지 봇 또는 Slack 메세지 봇)
