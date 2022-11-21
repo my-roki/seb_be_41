@@ -31,6 +31,11 @@ public class InMemoryMemberService implements MemberService {
         return member;
     }
 
+    @Override
+    public Member findMember(String member) {
+        return null;
+    }
+
     // ! Spring Security에서는 SimpleGrantedAuthority 를 사용해 Role 베이스 형태의 권한을 지정할 때 ‘Roll_’ + 권한명 형태로 지정해 주어야 합니다.
     private List<GrantedAuthority> createAuthorities(String... roles) {
         return Arrays.stream(roles)

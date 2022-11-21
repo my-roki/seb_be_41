@@ -40,6 +40,11 @@ public class DBMemberService implements MemberService {
         return saveMember;
     }
 
+    @Override
+    public Member findMember(String member) {
+        return null;
+    }
+
     private void verifyExistEmail(String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
 
