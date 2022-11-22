@@ -11,7 +11,7 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Username {
-    private String firstName = "first";
-    private String middleName = "middle";
-    private String lastName = "last";
+    private String firstName;
+    private String middleName;
+    private String lastName;
 }

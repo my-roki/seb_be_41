@@ -4,6 +4,7 @@ import com.cafe.stamp.Stamp;
 import com.cafe.audit.Auditable;
 import com.cafe.order.entity.Order;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,10 +61,16 @@ public class Member extends Auditable {
         MEMBER_QUIT("탈퇴 상태");
 
         @Getter
-        private String status;
+        private final String status;
 
         MemberStatus(String status) {
             this.status = status;
         }
+    }
+
+    public Member(String email, Username name, String phone) {
+        this.email = email;
+        this.name = name;
+        this.phone = phone;
     }
 }

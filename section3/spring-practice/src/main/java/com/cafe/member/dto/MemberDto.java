@@ -26,9 +26,10 @@ public class MemberDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class Patch {
         private long memberId;
-        
+
         private Username name;
 
         @NotSpace(message = "핸드폰 번호는 공백이 아니어야 합니다.")
