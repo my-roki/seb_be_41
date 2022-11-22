@@ -1,6 +1,7 @@
 package com.cafe.member.dto;
 
 import com.cafe.member.entity.Member;
+import com.cafe.member.entity.Username;
 import com.cafe.validator.NotSpace;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,8 +18,7 @@ public class MemberDto {
         @NotBlank(message = "이메일은 공백이 아니어야 합니다.")
         private String email;
 
-        @NotBlank(message = "이름은 공백이 아니어야 합니다.")
-        private String name;
+        private Username name;
 
         @Pattern(regexp = "^01\\d-\\d{3,4}-\\d{4}",
                 message = "핸드폰 번호는 01x로 시작하는 11자리 숫자로 이루어져야합니다. 구분자는 '-'으로 구분됩니다.")
@@ -28,9 +28,8 @@ public class MemberDto {
     @Getter
     public static class Patch {
         private long memberId;
-
-        @NotSpace(message = "이름은 공백이 아니어야합니다.")
-        private String name;
+        
+        private Username name;
 
         @NotSpace(message = "핸드폰 번호는 공백이 아니어야 합니다.")
         @Pattern(regexp = "^01\\d-\\d{3,4}-\\d{4}",
@@ -49,7 +48,7 @@ public class MemberDto {
     public static class Response {
         private long memberId;
         private String email;
-        private String name;
+        private Username name;
         private String phone;
         private String memberStatus;
         private Integer stampCount;

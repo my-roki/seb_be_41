@@ -51,6 +51,7 @@ public class EmailConfiguration {
         return new MockExceptionEmailSendable();
     }
 
+    @Primary
     @Bean
     EmailSendable testEmailSendable() {
         return new MockEmailSendable();
@@ -61,7 +62,6 @@ public class EmailConfiguration {
         return new SimpleEmailSendable(javaMailSender());
     }
 
-    @Primary
     @Bean
     public EmailSendable TemplateEmailSendable(TemplateEngine templateEngine) {
         return new TemplateEmailSendable(javaMailSender(), templateEngine, new Context());

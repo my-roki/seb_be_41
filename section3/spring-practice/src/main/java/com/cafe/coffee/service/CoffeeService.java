@@ -4,6 +4,7 @@ import com.cafe.coffee.entity.Coffee;
 import com.cafe.coffee.repository.CoffeeRepository;
 import com.cafe.exception.BusinessLogicException;
 import com.cafe.exception.ExceptionCode;
+import com.cafe.utils.CustomBeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -17,10 +18,12 @@ import java.util.Optional;
 public class CoffeeService {
     private CoffeeRepository coffeeRepository;
     private StorageService storageService;
+    private CustomBeanUtils beanUtils;
 
-    public CoffeeService(CoffeeRepository coffeeRepository, StorageService storageService) {
+    public CoffeeService(CoffeeRepository coffeeRepository, StorageService storageService, CustomBeanUtils beanUtils) {
         this.coffeeRepository = coffeeRepository;
         this.storageService = storageService;
+        this.beanUtils = beanUtils;
     }
 
     public Coffee createCoffee(Coffee coffee, MultipartFile coffeeImage) {
@@ -52,11 +55,7 @@ public class CoffeeService {
 
     public Coffee updateCoffee(Coffee coffee) {
         Coffee isCoffee = isCoffeeExist(coffee.getCoffeeId());
-
-        Optional.ofNullable(coffee.getKorName()).ifPresent(isCoffee::setKorName);
-        Optional.ofNullable(coffee.getEngName()).ifPresent(isCoffee::setEngName);
-        Optional.ofNullable(coffee.getPrice()).ifPresent(isCoffee::setPrice);
-        Optional.ofNullable(coffee.getCoffeeStatus()).ifPresent(isCoffee::setCoffeeStatus);
+        beanUtils.copyNonNullProperties(coffee, isCoffee);
 
         return coffeeRepository.save(isCoffee);
     }

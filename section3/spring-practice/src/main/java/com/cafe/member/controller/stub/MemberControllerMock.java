@@ -2,6 +2,7 @@ package com.cafe.member.controller.stub;
 
 import com.cafe.member.dto.MemberDto;
 import com.cafe.member.entity.Member;
+import com.cafe.member.entity.Username;
 import com.cafe.response.MultiResponseDto;
 import com.cafe.response.SingleResponseDto;
 import com.cafe.stamp.Stamp;
@@ -34,7 +35,7 @@ public class MemberControllerMock {
                 new MemberDto.Response(
                         1L,
                         "roki@hello.com",
-                        "roki",
+                        new Username("roki", "middle", "yoon"),
                         "010-1111-1111",
                         Member.MemberStatus.MEMBER_ACTIVE.getStatus(),
                         new Stamp().getStampCount());
@@ -48,8 +49,8 @@ public class MemberControllerMock {
         // ! Not implementation
 
         List<MemberDto.Response> response = List.of(
-                new MemberDto.Response(1L, "roki@hello.com", "roki", "010-1111-1111", Member.MemberStatus.MEMBER_ACTIVE.getStatus(), new Stamp().getStampCount()),
-                new MemberDto.Response(2L, "toki@hello.com", "toki", "010-2222-2222", Member.MemberStatus.MEMBER_ACTIVE.getStatus(), new Stamp().getStampCount()));
+                new MemberDto.Response(1L, "roki@hello.com", new Username("roki", "middle", "yoon"), "010-1111-1111", Member.MemberStatus.MEMBER_ACTIVE.getStatus(), new Stamp().getStampCount()),
+                new MemberDto.Response(2L, "toki@hello.com", new Username("roki", "middle", "yoon"), "010-2222-2222", Member.MemberStatus.MEMBER_ACTIVE.getStatus(), new Stamp().getStampCount()));
         PageImpl<MemberDto.Response> memberPage = new PageImpl<>(response, PageRequest.of(0, 10, Sort.by("memberId").descending()), 2);
 
         return new ResponseEntity<>(new MultiResponseDto<>(response, memberPage), HttpStatus.OK);
@@ -60,7 +61,7 @@ public class MemberControllerMock {
         MemberDto.Response response = new MemberDto.Response(
                 1L,
                 "roki@hello.com",
-                "roki",
+                new Username("roki", "middle", "yoon"),
                 "010-1111-1111",
                 Member.MemberStatus.MEMBER_ACTIVE.getStatus(),
                 new Stamp().getStampCount());
@@ -76,7 +77,7 @@ public class MemberControllerMock {
         MemberDto.Response response = new MemberDto.Response(
                 1L,
                 "roki@hello.com",
-                "roki",
+                new Username("roki", "middle", "yoon"),
                 "010-2222-2222",
                 Member.MemberStatus.MEMBER_ACTIVE.getStatus(),
                 new Stamp().getStampCount());

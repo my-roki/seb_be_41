@@ -4,6 +4,7 @@ import com.cafe.exception.BusinessLogicException;
 import com.cafe.exception.ExceptionCode;
 import com.cafe.member.entity.Member;
 import com.cafe.member.repository.MemberRepository;
+import com.cafe.utils.CustomBeanUtils;
 import com.cafe.utils.event.MemberRegistrationApplicationEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,10 +20,12 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
+    private final CustomBeanUtils<Member> beanUtils;
 
-    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher) {
+    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher, CustomBeanUtils<Member> beanUtils) {
         this.memberRepository = memberRepository;
         this.publisher = publisher;
+        this.beanUtils = beanUtils;
     }
 
     public Member createMember(Member member) {
@@ -48,11 +51,8 @@ public class MemberService {
 
     public Member updateMember(Member member) {
         Member isMember = isMemberExist(member.getMemberId());
-
-        Optional.ofNullable(member.getName()).ifPresent(isMember::setName);
-        Optional.ofNullable(member.getPhone()).ifPresent(isMember::setPhone);
-        Optional.ofNullable(member.getMemberStatus()).ifPresent(isMember::setMemberStatus);
-
+        beanUtils.copyNonNullProperties(member, isMember);
+        
         return memberRepository.save(isMember);
     }
 

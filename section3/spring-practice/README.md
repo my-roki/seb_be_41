@@ -17,10 +17,12 @@
 
 [//]: # (TODO local / production 개발환경 분리)
 
-[//]: # (TODO File upload 기능 구현 : com.cafe.coffee.service;com.cafe.coffee.service)
+[//]: # (TODO File upload 기능 구현 : com.cafe.coffee.service)
 
 [//]: # (TODO Rest Template 또는 WebClient)
 
 [//]: # (TODO Spring BeanWrapper : design pattern)
 
 [//]: # (TODO Discord 메세지 봇 또는 Slack 메세지 봇)
+
+[//]: # (TODO CustomBeanUtil com.cafe.utils)

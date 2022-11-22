@@ -2,6 +2,7 @@ package com.cafe.member.controller.stub;
 
 import com.cafe.member.dto.MemberDto;
 import com.cafe.member.entity.Member;
+import com.cafe.member.entity.Username;
 import com.cafe.response.SingleResponseDto;
 import com.cafe.stamp.Stamp;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,7 +31,7 @@ public class MemberControllerAdvice {
         MemberDto.Response response = new MemberDto.Response(
                 1L,
                 "roki@hello.com",
-                "roki",
+                new Username("roki", "middle", "yoon"),
                 "010-1111-1111",
                 Member.MemberStatus.MEMBER_ACTIVE.getStatus(),
                 new Stamp().getStampCount());

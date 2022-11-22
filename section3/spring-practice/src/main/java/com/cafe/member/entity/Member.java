@@ -22,8 +22,9 @@ public class Member extends Auditable {
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 100)
-    private String name;
+    @Embedded
+    @AttributeOverride(name = "middleName", column = @Column(name = "MIDDLE_OPTION"))
+    private Username name;
 
     @Column(nullable = false, length = 13, unique = true)
     private String phone;
