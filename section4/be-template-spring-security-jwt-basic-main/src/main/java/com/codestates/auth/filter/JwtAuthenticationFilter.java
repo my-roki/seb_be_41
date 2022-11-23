@@ -12,8 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,13 +47,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                            FilterChain chain, Authentication authentication) {
+                                            FilterChain chain, Authentication authentication) throws ServletException, IOException {
         Member member = (Member) authentication.getPrincipal();
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
         response.setHeader("Authorization", "Bearer" + accessToken);
         response.setHeader("Refresh", refreshToken);
+
+        // 현재 코드 상에서는 로그인 인증에 성공한 후, JwtAuthenticationFilter의 successfulAuthentication() 메서드에서 JWT를 생성하고 있지만
+        // AuthenticationSuccessHandler에서 JWT를 생성하는 것 역시 나쁘지 않은 것 같다.
+        this.getSuccessHandler().onAuthenticationSuccess(request, response, authentication);
     }
 
     private String delegateAccessToken(Member member) {
