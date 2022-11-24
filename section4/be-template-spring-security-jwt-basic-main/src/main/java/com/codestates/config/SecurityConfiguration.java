@@ -2,6 +2,8 @@ package com.codestates.config;
 
 import com.codestates.auth.filter.JwtAuthenticationFilter;
 import com.codestates.auth.filter.JwtVerificationFilter;
+import com.codestates.auth.handler.MemberAccessDeniedHandler;
+import com.codestates.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.auth.jwt.JwtTokenizer;
@@ -44,6 +46,10 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 // 접근할 수 있는 리소스에 대해 각각의 접근 권한을 부여

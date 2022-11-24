@@ -52,7 +52,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
-        response.setHeader("Authorization", "Bearer" + accessToken);
+        response.setHeader("Authorization", "Bearer_" + accessToken);
         response.setHeader("Refresh", refreshToken);
 
         // 현재 코드 상에서는 로그인 인증에 성공한 후, JwtAuthenticationFilter의 successfulAuthentication() 메서드에서 JWT를 생성하고 있지만
