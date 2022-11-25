@@ -13,7 +13,7 @@
 
 [//]: # (TODO Testing)
 
-[//]: # (TODO API 문서 작성 코드)
+[//]: # (TODO API 문서 작성 코드 com.cafe.restdocs)
 
 [//]: # (TODO local / production 개발환경 분리)
 
@@ -26,3 +26,7 @@
 [//]: # (TODO Discord 메세지 봇 또는 Slack 메세지 봇)
 
 [//]: # (TODO CustomBeanUtil com.cafe.utils)
+
+[//]: # (TODO Login and roles)
+
+[//]: # (TODO Social login)

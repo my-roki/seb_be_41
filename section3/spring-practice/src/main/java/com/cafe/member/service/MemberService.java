@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,14 +23,20 @@ public class MemberService {
     private final ApplicationEventPublisher publisher;
     private final CustomBeanUtils<Member> beanUtils;
 
-    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher, CustomBeanUtils<Member> beanUtils) {
+    private final PasswordEncoder passwordEncoder;
+
+    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher, CustomBeanUtils<Member> beanUtils, PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
         this.publisher = publisher;
         this.beanUtils = beanUtils;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Member createMember(Member member) {
         verifyMemberExistEmail(member.getEmail());
+
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
 
         Member savedMember = memberRepository.save(member);
 

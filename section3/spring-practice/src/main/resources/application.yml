@@ -18,13 +18,12 @@ spring:
 #    properties:
 #      hibernate:
 #        format_sql: true
-  logging:
-    level:
-      org:
-        springframework:
-          orm:
-            jpa: DEBUG
-
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
 mail:
   smtp:
     host: smtp.gmail.com
@@ -34,7 +33,6 @@ mail:
     auth: true
     starttls:
       enable: true
-
 #server:
 #  ssl:
 #    key-store: classpath:localhost.p12  # 인증서 경로
@@ -42,4 +40,7 @@ mail:
 #    key-store-password: changeit  # 인증서 비밀번호
     # 여기서 비밀번호인 changeit은 비밀번호를 설정하지 않았을 때의 기본값입니다.
     # 인증서 비밀번호는 인증서를 생성할 때 설정하거나 생성 후 변경해줄 수 있습니다.
-
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 1440
