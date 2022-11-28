@@ -2,6 +2,8 @@ package com.cafe.auth.filter;
 
 import com.cafe.auth.jwt.JwtTokenizer;
 import com.cafe.auth.utils.CustomAuthorityUtils;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,8 +30,16 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        Map<String, Object> claims = verifyJws(request);
-        setAuthenticationToContext(claims);
+        try {
+            Map<String, Object> claims = verifyJws(request);
+            setAuthenticationToContext(claims);
+        } catch (SignatureException signatureException) {
+            request.setAttribute("exception", signatureException);
+        } catch (ExpiredJwtException expiredJwtException) {
+            request.setAttribute("exception", expiredJwtException);
+        } catch (Exception exception) {
+            request.setAttribute("exception", exception);
+        }
 
         filterChain.doFilter(request, response);
     }

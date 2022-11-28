@@ -2,6 +2,8 @@ package com.cafe.config;
 
 import com.cafe.auth.filter.JwtAuthenticationFilter;
 import com.cafe.auth.filter.JwtVerificationFilter;
+import com.cafe.auth.handler.MemberAccessDeniedHandler;
+import com.cafe.auth.handler.MemberAuthenticationEntryPoint;
 import com.cafe.auth.handler.MemberAuthenticationFailureHandler;
 import com.cafe.auth.handler.MemberAuthenticationSuccessHandler;
 import com.cafe.auth.jwt.JwtTokenizer;
@@ -45,6 +47,10 @@ public class SecurityConfig {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .and()
                 .apply(new CustomFilterConfigure())
                 .and()
                 .authorizeHttpRequests(a -> a
