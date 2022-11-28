@@ -31,7 +31,7 @@ public class Member extends Auditable {
     @AttributeOverride(name = "middleName", column = @Column(name = "MIDDLE_OPTION"))
     private Username name;
 
-    @Column(nullable = false, length = 13, unique = true)
+    @Column(nullable = false, length = 13)
     private String phone;
 
     @Enumerated(value = EnumType.STRING)

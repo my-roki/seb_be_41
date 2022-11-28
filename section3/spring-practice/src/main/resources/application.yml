@@ -18,6 +18,22 @@ spring:
 #    properties:
 #      hibernate:
 #        format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+          github:
+            client-id: ${GITHUB_CLIENT}
+            client-secret: ${GITHUB_SECRET}
+            scope:
+              - user
+              - user:email
 logging:
   level:
     org:
@@ -33,7 +49,10 @@ mail:
     auth: true
     starttls:
       enable: true
-#server:
+server:
+  servlet:
+    encoding:
+      force-response: true
 #  ssl:
 #    key-store: classpath:localhost.p12  # 인증서 경로
 #    key-store-type: PKCS12  # 인증서 형식

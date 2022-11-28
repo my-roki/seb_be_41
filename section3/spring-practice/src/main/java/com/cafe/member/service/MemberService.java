@@ -39,8 +39,12 @@ public class MemberService {
     public Member createMember(Member member) {
         verifyMemberExistEmail(member.getEmail());
 
-        String encryptedPassword = passwordEncoder.encode(member.getPassword());
-        member.setPassword(encryptedPassword);
+        if (member.getPassword() != null) {  // password가 null이라는 것은 OAuth2방식 로그인
+            String encryptedPassword = passwordEncoder.encode(member.getPassword());
+            member.setPassword(encryptedPassword);
+        } else {
+            member.setPassword("");
+        }
 
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);

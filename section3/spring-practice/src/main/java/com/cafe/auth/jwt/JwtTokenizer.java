@@ -41,6 +41,7 @@ public class JwtTokenizer {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
+                .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact();

@@ -2,12 +2,10 @@ package com.cafe.config;
 
 import com.cafe.auth.filter.JwtAuthenticationFilter;
 import com.cafe.auth.filter.JwtVerificationFilter;
-import com.cafe.auth.handler.MemberAccessDeniedHandler;
-import com.cafe.auth.handler.MemberAuthenticationEntryPoint;
-import com.cafe.auth.handler.MemberAuthenticationFailureHandler;
-import com.cafe.auth.handler.MemberAuthenticationSuccessHandler;
+import com.cafe.auth.handler.*;
 import com.cafe.auth.jwt.JwtTokenizer;
 import com.cafe.auth.utils.CustomAuthorityUtils;
+import com.cafe.member.service.MemberService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,8 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -30,10 +27,12 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final MemberService memberService;
 
-    public SecurityConfig(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
+    public SecurityConfig(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberService memberService) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.memberService = memberService;
     }
 
     @Bean
@@ -74,15 +73,12 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.GET, "/*/orders/**").hasAnyRole("USER", "ADMIN")
                         .antMatchers(HttpMethod.PATCH, "/*/orders/**").hasRole("USER, ADMIN")
                         .antMatchers(HttpMethod.DELETE, "/*/orders/**").hasRole("USER")
+                )
+                .oauth2Login(oauth2 ->
+                        oauth2.successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberService))
                 );
 
         return httpSecurity.build();
-    }
-
-    // password encoder
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     // Cors configuration
@@ -112,7 +108,7 @@ public class SecurityConfig {
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 
             builder.addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+                    .addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
     }
 }

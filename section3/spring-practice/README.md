@@ -27,6 +27,6 @@
 
 [//]: # (TODO CustomBeanUtil com.cafe.utils)
 
-[//]: # (TODO Login and roles)
+[//]: # (TODO Login and roles com.cafe.auth)
 
-[//]: # (TODO Social login)
+[//]: # (TODO Social login com.cafe.auth)
