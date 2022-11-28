@@ -13,10 +13,20 @@ public class CustomAuthorityUtils {
     @Value("${ADMIN_EMAIL}")
     private String adminEmail;
 
+    private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER");
+    private final List<String> USER_ROLES_STRING = List.of("USER");
+
     public List<GrantedAuthority> createAuthority(List<String> roles) {
         List<GrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
         return authorities;
+    }
+
+    public List<String> createRoles(String email) {
+        if (email.equals(adminEmail)) {
+            return ADMIN_ROLES_STRING;
+        }
+        return USER_ROLES_STRING;
     }
 }

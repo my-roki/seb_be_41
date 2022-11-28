@@ -1,5 +1,6 @@
 package com.cafe.member.service;
 
+import com.cafe.auth.utils.CustomAuthorityUtils;
 import com.cafe.exception.BusinessLogicException;
 import com.cafe.exception.ExceptionCode;
 import com.cafe.member.entity.Member;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,12 +26,14 @@ public class MemberService {
     private final CustomBeanUtils<Member> beanUtils;
 
     private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
 
-    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher, CustomBeanUtils<Member> beanUtils, PasswordEncoder passwordEncoder) {
+    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher, CustomBeanUtils<Member> beanUtils, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
         this.memberRepository = memberRepository;
         this.publisher = publisher;
         this.beanUtils = beanUtils;
         this.passwordEncoder = passwordEncoder;
+        this.authorityUtils = authorityUtils;
     }
 
     public Member createMember(Member member) {
@@ -37,6 +41,9 @@ public class MemberService {
 
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
 
         Member savedMember = memberRepository.save(member);
 
@@ -59,7 +66,7 @@ public class MemberService {
     public Member updateMember(Member member) {
         Member isMember = isMemberExist(member.getMemberId());
         beanUtils.copyNonNullProperties(member, isMember);
-        
+
         return memberRepository.save(isMember);
     }
 
