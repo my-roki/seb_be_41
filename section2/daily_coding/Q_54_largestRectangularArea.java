@@ -77,6 +77,7 @@ System.out.println(output); // --> 12
  */
 
 import java.util.Arrays;
+import java.util.Stack;
 
 public class Q_54_largestRectangularArea {
     public static void main(String[] args) {
@@ -108,31 +109,52 @@ public class Q_54_largestRectangularArea {
     }
 
     /**
-     * 완전탐색(O(N^2))을 통해 각 높이에서 만들수 있는 최대 사각형을 구해 서로 비교하면서 최댓값을 찾습니다.
-     * TODO Stack을 사용하여 PLE(previous less element), NLE(next less element) 알고리즘을 구현하면 O(N * logN) 복잡도로 구하기 가능
+     * Stack을 사용하여 PLE(previous less element), NLE(next less element) 알고리즘을 구현하면 O(N * logN) 복잡도로 구하기 가능
      */
     public int largestRectangularArea(int[] histogram) {
-        int output = 0;
+        int maxArea = 0;
+        int[] tempPLE = new int[histogram.length];
+        int[] tempNLE = new int[histogram.length];
+        Arrays.fill(tempPLE, -1);
+        Arrays.fill(tempNLE, -1);
 
-        // 현재 히스토그램에서 가장 높은 높이를 시작으로 점점 줄여가며 사각형을 구합니다.
-        int maxHeight = Arrays.stream(histogram).max().getAsInt();
-        for (int height = maxHeight; height > 0; height--) {
-            int candidate = 0;
-            int width = 0;
-            // 가로축 부분을 완전탐색하여 만들 수 있는 최대 가로축 길이를 구합니다.
-            for (int j = 0; j < histogram.length - 1; j++) {
-                if (histogram[j] >= height) {
-                    candidate++;
-                } else {
-                    width = Math.max(width, candidate);
-                    candidate = 0;
-                }
-            }
-            // 이전 넓이가 최대였던 사각형과 비교하여 넓이가 더 큰 사각형을 구합니다.
-            int rectangle = width * height;
-            output = Math.max(output, rectangle);
+        int[] PLE = findPLE(tempPLE, histogram);
+        int[] NLE = findNLE(tempNLE, histogram);
+        for (int i = 0; i < histogram.length; i++) {
+            int barsOnLeft = PLE[i] == -1 ? i : i - PLE[i] - 1;
+            int barsOnRight = NLE[i] == -1 ? histogram.length - 1 - i : NLE[i] - i - 1;
+            int width = barsOnLeft + barsOnRight + 1;
+            maxArea = Math.max(maxArea, width * histogram[i]);
         }
-        return output;
+        return maxArea;
+    }
+
+    public int[] findPLE(int[] PLE, int[] histogram) {
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < histogram.length; i++) {
+            while (stack.size() > 0 && histogram[stack.get(stack.size() - 1)] >= histogram[i]) {
+                stack.pop();
+            }
+            if (stack.size() > 0) {
+                PLE[i] = stack.get(stack.size() - 1);
+            }
+            stack.push(i);
+        }
+        return PLE;
+    }
+
+    public int[] findNLE(int[] NLE, int[] histogram) {
+        Stack<Integer> stack = new Stack<>();
+        for (int i = histogram.length - 1; i >= 0; i--) {
+            while (stack.size() > 0 && histogram[stack.get(stack.size() - 1)] >= histogram[i]) {
+                stack.pop();
+            }
+            if (stack.size() > 0) {
+                NLE[i] = stack.get(stack.size() - 1);
+            }
+            stack.push(i);
+        }
+        return NLE;
     }
 
 }
