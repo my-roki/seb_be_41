@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // TODO : 리팩토링 -> api문서화 공통부분 모듈화
 @WebMvcTest(MemberController.class)
 @MockBean(JpaMetamodelMappingContext.class)
+@AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs
 public class MemberControllerRestDocsTest implements MemberControllerTestHelper {
     @Autowired
@@ -86,6 +88,7 @@ public class MemberControllerRestDocsTest implements MemberControllerTestHelper 
                         requestFields(
                                 List.of(
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일").attributes(key("constraints").value(emailDescriptions)),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
                                         fieldWithPath("name").type(JsonFieldType.OBJECT).description("이름"),
                                         fieldWithPath("name.firstName").type(JsonFieldType.STRING).description("First name").optional(),
                                         fieldWithPath("name.middleName").type(JsonFieldType.STRING).description("Middle name").optional(),
